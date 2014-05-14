@@ -117,7 +117,6 @@ a main method.
 }(hunk(false)));
 ```
 
-
 # Core modules
 
 Hunk embeds a few core modules that can be really useful to speed up JS apps 
@@ -148,8 +147,9 @@ storage.
 // Start, will set conf `key` > `Hello Hunk`
 hunk();
 
-// Stop, will log `Hello Hunk` in console
+// Stop
 hunk();
+// -> "Hello Hunk"
 ```
 
 # Common use cases
@@ -177,20 +177,20 @@ Here we create an anonymous module to initialize and start our application.
 #### Get hunk running status
 
 To know whether hunk is running or not, one may use `hunk.state` method.
-```js
+```html
 <script type="text/javascript" src="hunk-latest.js"></script>
 <script type="text/javascript">
     
     // Is it running?
     console.log(hunk.state());
-    // false
+    // -> false
 
     // Start hunk!
     hunk();
 
     // Is it running?
     console.log(hunk.state());
-    // true
+    // -> true
 
     // Then after a second
     setTimeout(function() {
@@ -200,7 +200,7 @@ To know whether hunk is running or not, one may use `hunk.state` method.
 
         // Is it running?
         console.log(hunk.state());
-        // false
+        // -> false
     }, 1000);
 </script>
 ```
@@ -214,13 +214,13 @@ To know whether hunk is running or not, one may use `hunk.state` method.
     
     // Add a start hook
     hunk(function() {
-        console.log('App just started!')
+        console.log('App just started!');
     });
 
 }());
 
 // ... later on, start hunk
 hunk();
-// will log `App just started!`.
+// -> "App just started!"
 
 ```

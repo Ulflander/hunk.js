@@ -52,10 +52,13 @@
          *
          * Called with one Boolean param `false`, it will return an anonymous 
          * module.
+         *
+         * Called with two params, first being a string and second being a 
+         * function, it will bind the function as main module container.
          * 
          */
         self.main = function() {
-            var args = Array.prototype.slice.call(arguments) || [],
+            var args = Array.prototype.slice.call(arguments) || [],
                 m,
                 arg;
 
@@ -66,6 +69,7 @@
                 } else {
                     ctx.hunk.stop();
                 }
+
                 return;
             }
 
@@ -87,13 +91,13 @@
                 // Register/get module
                 if (typeof arg === 'string') {
                     if (!modules[arg]) {
-                        modules[arg] = function() {};
+                        modules[arg] = function(){};
                     }
 
                     return modules[arg];
                 }
 
-                // Register/get anonymous module
+                // Register anonymous module
                 if (typeof arg === 'boolean' && arg === false) {
                     m = function() {};
                     anon.push(m);
@@ -105,17 +109,31 @@
 
             // Two arguments
             if (args.length === 2) {
+                arg = args.shift();
 
-                if (typeof arg === 'string' && arg !== 'hunk') {
-                    modules[arg] = args[1];
+                if (typeof arg === 'string' && arg !== 'hunk' &&
+                    typeof args[0] === 'function') {
+
+                    // If module already exists, rebind all declared members
+                    // to the new holder
+                    if (!!modules[arg]) {
+                        for (m in modules[arg]) {
+                            if (modules[arg].hasOwnProperty(k)) {
+                                args[0][k] = modules[arg][k];
+                            }
+                        }
+                    }
+
+                    modules[arg] = args[0];
                 }
-                return args[1];
+
+                return args[0];
             }
 
         };
 
         // Here is the magic: use hunk main to declare hunk main, so calling
-        // `hunk` will call hunk.main
+        // `hunk` will call hunk.main. Ha ha.
         self = self.main('hunk', self.main);
 
         /**
@@ -131,59 +149,87 @@
          * Start hunk.
          */
         self.start = function() {
+            if (started === true) {
+                return;
+            }
+
             var i,
-                k,
                 l = callbacks.length;
+
+            started = true;
 
             for(i = 0; i < l; i += 1) {
                 callbacks[i](self);
             }
+            callbacks = [];
 
-            for (k in modules) {
+            return self.trigger('start');
+        };
+
+        /**
+         * Stop hunk.
+         */
+        self.stop = function() {
+            if (started === false) {
+                return;
+            }
+            started = false;
+            return self.trigger('stop');
+        };
+
+        self.trigger = function(method) {
+            for (var k in modules) {
                 if (modules.hasOwnProperty(k) && 
-                    typeof modules[k].start === 'function') {
-                    modules[k].start();
+                    typeof modules[k][method] === 'function') {
+                    modules[k][method]();
                 }
             }
 
-            started = true;
+            return self;
         };
 
+        self.extend = function(method) {
+            if (self[method]) {
 
+            }
+        };
 
+        return self;
 
-    }({});
+    }({}));
 
 
     // Register itself
     ctx.hunk = hunk;
 
+
+
     /**
      * Configuration core module.
      */
-    (function(self) {
+    (function() {
 
         // Conf store
-        var conf = {};
+        var conf = {},
 
-        /**
-         * Set or get a configuration value.
-         * 
-         */
-        self = hunk('conf', function(/* key, value */) {
-            var args = Array.prototype.slice.call(arguments) || [];
-            if (args.length === 0) {
-                return conf;
-            }
+            /**
+             * Set or get a configuration value.
+             * 
+             */
+            self = hunk('conf', function(/* key, value */) {
+                var args = Array.prototype.slice.call(arguments) || [];
+                if (args.length === 0) {
+                    return conf;
+                }
 
-            if (args.length === 2) {
-                conf[arg[0]] = arg[1];
-            }
+                if (args.length === 2) {
+                    conf[args[0]] = args[1];
+                }
 
-            return conf[arg[0]];
-        };
+                return conf[args[0]];
+            });
 
-    }(hunk('conf')));
+    }());
 
 }());
 
