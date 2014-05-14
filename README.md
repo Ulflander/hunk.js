@@ -27,7 +27,6 @@ modules depending on current state.
 </script>
 ```
 
-####
 
 # Static modules
 
@@ -62,6 +61,11 @@ modules depending on current state.
 }(hunk('depends_on_chunk')));
 ```
 
+### Module with `main` method
+
+It is possible to declare a module with 
+
+
 ### Anonymous static module
 
 By registering a module without giving a name, it will create an anonymous
@@ -83,7 +87,76 @@ entirely protected from external calls.
 }(hunk(false)));
 ```
 
-#### Common hunk starter using an anon module
+### Static module with main method
+
+It is possible to setup a module so calling it's name as a function will call
+a main method.
+
+```js
+// A module with a "main method"
+(function(self) {
+    'use strict';
+    
+    // Redefine self with a function
+    self = hunk('main_module', function() {
+        console.log("Main method called");
+    });
+
+}(hunk('main_module')));
+
+// Then in another module
+(function(self) {
+    
+    // Require our main_module
+    var main_module = hunk('main_module');
+
+    // And call it directly!
+    main_module();
+    // -> "Main method called"
+
+}(hunk(false)));
+```
+
+
+# Core modules
+
+Hunk embeds a few core modules that can be really useful to speed up JS apps 
+development.
+
+### Conf
+
+`conf` core module is a tiny static module to manage a key/value pairs centralized 
+storage.
+
+```js
+(function(self) {
+    'use strict';
+    
+    var conf = hunk.conf;
+
+    self.start = function () {
+        conf('key', 'Hello Hunk');
+    };
+
+    self.stop = function () {
+        console.log(conf('key'));
+        // "value"
+    };
+
+}(hunk(false)));
+
+// Start, will set conf `key` > `Hello Hunk`
+hunk();
+
+// Stop, will log `Hello Hunk` in console
+hunk();
+```
+
+# Common use cases
+
+#### Application starter using an anonymous module
+
+Here we create an anonymous module to initialize and start our application.
 
 ```js
 (function(anon) {
@@ -101,35 +174,53 @@ entirely protected from external calls.
 }(hunk(false)));
 ```
 
+#### Get hunk running status
 
-# Core modules
-
-Hunk embeds a few core modules that can be really useful to speed up JS apps 
-development.
-
-### Conf
-
+To know whether hunk is running or not, one may use `hunk.state` method.
 ```js
-(function(self) {
+<script type="text/javascript" src="hunk-latest.js"></script>
+<script type="text/javascript">
     
-    var conf = hunk.conf;
+    // Is it running?
+    console.log(hunk.state());
+    // false
 
-    self.start = function () {
-        conf('key', 'value');
-    };
+    // Start hunk!
+    hunk();
 
-    self.stop = function () {
-        console.log(conf('key'));
-        // "value"
-    };
+    // Is it running?
+    console.log(hunk.state());
+    // true
 
-}(hunk(true)));
+    // Then after a second
+    setTimeout(function() {
 
-hunk();
-hunk.end();
+        // Stop hunk
+        hunk();
+
+        // Is it running?
+        console.log(hunk.state());
+        // false
+    }, 1000);
+</script>
 ```
 
 
+#### Call a function when hunk starts
 
+```js
+(function() {
+    'use strict';
+    
+    // Add a start hook
+    hunk(function() {
+        console.log('App just started!')
+    });
 
+}());
 
+// ... later on, start hunk
+hunk();
+// will log `App just started!`.
+
+```
