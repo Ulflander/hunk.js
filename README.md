@@ -32,6 +32,8 @@ modules depending on current state.
 
 ### Register static module
 
+Let's declare a simple `chunk` module that logs a message in console when hunk starts.
+
 ```js
 (function(self) {
     'use strict';
@@ -49,22 +51,20 @@ modules depending on current state.
 
 ### Call a static module method
 
+Now that we declared our `chunk` module with its `pub` method, let's create 
+another module that will call that method.
+
 ```js
 (function(self) {
     
     var chunk = hunk('chunk');
 
     self.start = function () {
-        return chunk.public();
+        return chunk.pub();
     };
 
 }(hunk('depends_on_chunk')));
 ```
-
-### Module with `main` method
-
-It is possible to declare a module with 
-
 
 ### Anonymous static module
 
@@ -89,7 +89,7 @@ entirely protected from external calls.
 
 ### Static module with main method
 
-It is possible to setup a module so calling it's name as a function will call
+It is possible to setup a module so calling its name as a function will call
 a main method.
 
 ```js
