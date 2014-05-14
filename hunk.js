@@ -12,6 +12,8 @@
                 return window;
             }
         }()),
+        // Anonymous modules
+        anon = [],
         // Did hunk started
         started = false,
         // Hunk start callbacks
@@ -35,10 +37,13 @@
      * Called with one String param, it will return the so-called module (or an
      * empy object to be populated for a new module).
      *
+     * Called with one Boolean param `false`, it will return an anonymous 
+     * module.
      * 
      */
     hunk = function() {
         var args = Array.prototype.slice.call(arguments) || [],
+            m,
             arg;
 
         // Start application
@@ -71,6 +76,13 @@
                 }
 
                 return modules[arg];
+            }
+
+            // Register/get anonymous module
+            if (typeof arg === 'boolean' && arg === false) {
+                m = function() {};
+                anon.push(m);
+                return m;
             }
 
             return;

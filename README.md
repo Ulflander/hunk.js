@@ -3,39 +3,46 @@ Hunk.js
 
 _Please note that this project is still a work in progress._
 
-Micro-framework for JavaScript applications modularization.
+Micro-framework for JavaScript applications modularization, for Node.js and the browser.
 
 ### Start and stop Hunk
 
-Include the Hunk JS source, then just call `hunk()`.
+Include the Hunk JS source, then just call `hunk()` that will start or stop 
+modules depending on current state.
 
 ```html
 <script type="text/javascript" src="hunk-latest.js"></script>
 <script type="text/javascript">
+
     // Start hunk!
     hunk();
 
-    // Or using start method:
-    hunk.start();
-
+    // Then after a second
     setTimeout(function() {
 
-        hunk.stop();
+        // Stop hunk
+        hunk();
 
     }, 1000);
 </script>
 ```
+
+####
+
 # Static modules
 
 ### Register static module
 
 ```js
 (function(self) {
+    'use strict';
     
-    var private = 'Hello hunk!';
+    // A private member
+    var priv = 'Hello hunk!';
 
-    self.public = function () {
-        return private;
+    // A public member
+    self.pub = function () {
+        return priv;
     };
 
 }(hunk('chunk')));
@@ -46,7 +53,7 @@ Include the Hunk JS source, then just call `hunk()`.
 ```js
 (function(self) {
     
-    var chunk = hunk.chunk;
+    var chunk = hunk('chunk');
 
     self.start = function () {
         return chunk.public();
@@ -57,12 +64,39 @@ Include the Hunk JS source, then just call `hunk()`.
 
 ### Anonymous static module
 
+By registering a module without giving a name, it will create an anonymous
+module. Anon modules can't be required from other modules, and therefore are
+entirely protected from external calls.
+
 ```js
-(function(self) {
+// By convention, anonymous modules take `anon` parameter rather than `self`.
+// It let developers identify anon modules directly from the head of the code.
+(function(anon) {
     
-    self.start = function() {
+    // Anonymous modules can contain hooks called from 
+    // hunk start/stop process.
+    anon.start = function() {
         console.log('Im anon, so no module can call me.');
     };
+
+// Call hunk and pass `false` to declare the module as anon
+}(hunk(false)));
+```
+
+#### Common hunk starter using an anon module
+
+```js
+(function(anon) {
+    'use strict';
+
+    // Require some modules to be initialized
+    var conf = hunk('conf');
+
+    // Initialize whatever needs to be initialized
+    conf('key', 'value');
+
+    // Start hunk
+    hunk();
 
 }(hunk(false)));
 ```
