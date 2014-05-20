@@ -5,7 +5,7 @@
     // Hunk context
     var ctx = (function() {
             // Under node, context is exports
-            if (typeof module !== 'undefined' && 
+            if (typeof module !== 'undefined' &&
                 typeof module.exports !== 'undefined') {
                 return module.exports;
             } else {
@@ -24,11 +24,11 @@
 
 
     // Hunk core is a module in itself
-    var hunk = (function(self) {
+    hunk = (function(self) {
 
         // Identified modules
         var modules = {},
-        
+
         // Anonymous modules
             anon = [],
 
@@ -50,12 +50,12 @@
          * Called with one String param, it will return the so-called module (or an
          * empy object to be populated for a new module).
          *
-         * Called with one Boolean param `false`, it will return an anonymous 
+         * Called with one Boolean param `false`, it will return an anonymous
          * module.
          *
-         * Called with two params, first being a string and second being a 
+         * Called with two params, first being a string and second being a
          * function, it will bind the function as main module container.
-         * 
+         *
          */
         self.main = function() {
             var args = Array.prototype.slice.call(arguments) || [],
@@ -138,7 +138,7 @@
 
         /**
          * Return true if hunk is running, false otherwise
-         * 
+         *
          * @return {Boolean} Hunk running state
          */
         self.state = function() {
@@ -179,7 +179,7 @@
 
         self.trigger = function(method) {
             for (var k in modules) {
-                if (modules.hasOwnProperty(k) && 
+                if (modules.hasOwnProperty(k) &&
                     typeof modules[k][method] === 'function') {
                     modules[k][method]();
                 }
@@ -203,34 +203,33 @@
     ctx.hunk = hunk;
 
 
-
-    /**
-     * Configuration core module.
-     */
-    (function() {
-
-        // Conf store
-        var conf = {},
-
-            /**
-             * Set or get a configuration value.
-             * 
-             */
-            self = hunk('conf', function(/* key, value */) {
-                var args = Array.prototype.slice.call(arguments) || [];
-                if (args.length === 0) {
-                    return conf;
-                }
-
-                if (args.length === 2) {
-                    conf[args[0]] = args[1];
-                }
-
-                return conf[args[0]];
-            });
-
-    }());
-
 }());
 
+
+
+/**
+ * Configuration core module.
+ */
+(function() {
+
+    // Conf store
+    var conf = {},
+
+        /**
+         * Set or get a configuration value.
+         *
+         */
+        self = hunk('conf', function(/* key, value */) {
+            var args = Array.prototype.slice.call(arguments) || [];
+            if (args.length === 0) {
+                return conf;
+            }
+
+            if (args.length === 2) {
+                conf[args[0]] = args[1];
+            }
+
+            return conf[args[0]];
+        });
+}());
 

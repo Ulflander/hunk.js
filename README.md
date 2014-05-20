@@ -5,13 +5,31 @@ _Please note that this project is still a work in progress._
 
 Micro-framework for JavaScript applications modularization, for Node.js and the browser.
 
+
+Hunk is not a package manager. Hunk has been created to promote better JS
+factorisation, and to help modularize little applications.
+
+
+- [Benefits](#benefits)
+- [Install](#install)
+- [Basics](#basics)
+- [Static modules](#static-modules)
+- [Core modules](#core-modules)
+
+# Benefits
+
+# Install
+
+# Basics
+
 ### Start and stop Hunk
 
-Include the Hunk JS source, then just call `hunk()` that will start or stop 
+Include the Hunk JS source, then just call `hunk()` that will start or stop
 modules depending on current state.
 
+
 ```html
-<script type="text/javascript" src="hunk-latest.js"></script>
+<script type="text/javascript" src="hunk.js"></script>
 <script type="text/javascript">
 
     // Start hunk!
@@ -27,6 +45,7 @@ modules depending on current state.
 </script>
 ```
 
+### A first module
 
 # Static modules
 
@@ -37,7 +56,7 @@ Let's declare a simple `chunk` module that logs a message in console when hunk s
 ```js
 (function(self) {
     'use strict';
-    
+
     // A private member
     var priv = 'Hello hunk!';
 
@@ -51,12 +70,12 @@ Let's declare a simple `chunk` module that logs a message in console when hunk s
 
 ### Call a static module method
 
-Now that we declared our `chunk` module with its `pub` method, let's create 
+Now that we declared our `chunk` module with its `pub` method, let's create
 another module that will call that method.
 
 ```js
 (function(self) {
-    
+
     var chunk = hunk('chunk');
 
     self.start = function () {
@@ -76,8 +95,8 @@ entirely protected from external calls.
 // By convention, anonymous modules take `anon` parameter rather than `self`.
 // It let developers identify anon modules directly from the head of the code.
 (function(anon) {
-    
-    // Anonymous modules can contain hooks called from 
+
+    // Anonymous modules can contain hooks called from
     // hunk start/stop process.
     anon.start = function() {
         console.log('Im anon, so no module can call me.');
@@ -96,7 +115,7 @@ a main method.
 // A module with a "main method"
 (function(self) {
     'use strict';
-    
+
     // Redefine self with a function
     self = hunk('main_module', function() {
         console.log("Main method called");
@@ -106,7 +125,7 @@ a main method.
 
 // Then in another module
 (function(self) {
-    
+
     // Require our main_module
     var main_module = hunk('main_module');
 
@@ -119,18 +138,18 @@ a main method.
 
 # Core modules
 
-Hunk embeds a few core modules that can be really useful to speed up JS apps 
+Hunk embeds a few core modules that can be really useful to speed up JS apps
 development.
 
 ### Conf
 
-`conf` core module is a tiny static module to manage a key/value pairs centralized 
+`conf` core module is a tiny static module to manage a key/value pairs centralized
 storage.
 
 ```js
 (function(self) {
     'use strict';
-    
+
     var conf = hunk.conf;
 
     self.start = function () {
@@ -151,6 +170,15 @@ hunk();
 hunk();
 // -> "Hello Hunk"
 ```
+
+# Hunk API
+
+### `hunk()`
+
+Main hunk method has many use, depending on the kind of parameters we pass to it:
+
+- `hunk()` - without parameter - Will start/stop hunk app
+-
 
 # Common use cases
 
@@ -180,7 +208,7 @@ To know whether hunk is running or not, one may use `hunk.state` method.
 ```html
 <script type="text/javascript" src="hunk-latest.js"></script>
 <script type="text/javascript">
-    
+
     // Is it running?
     console.log(hunk.state());
     // -> false
@@ -211,7 +239,7 @@ To know whether hunk is running or not, one may use `hunk.state` method.
 ```js
 (function() {
     'use strict';
-    
+
     // Add a start hook
     hunk(function() {
         console.log('App just started!');
