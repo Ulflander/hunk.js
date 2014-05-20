@@ -92,6 +92,7 @@
                 if (typeof arg === 'string') {
                     if (!modules[arg]) {
                         modules[arg] = function(){};
+                        self[arg] = modules[arg];
                     }
 
                     return modules[arg];
@@ -124,6 +125,8 @@
                         }
                     }
 
+                    // Rebind to hunk
+                    self[arg] = args[0];
                     modules[arg] = args[0];
                 }
 
@@ -177,6 +180,12 @@
             return self.trigger('stop');
         };
 
+        /**
+         * Trigger a method on all modules.
+         *
+         * @param  {String} method Method name to call on modules
+         * @return {hunk}          Hunk reference for chained commands
+         */
         self.trigger = function(method) {
             for (var k in modules) {
                 if (modules.hasOwnProperty(k) &&
@@ -186,12 +195,6 @@
             }
 
             return self;
-        };
-
-        self.extend = function(method) {
-            if (self[method]) {
-
-            }
         };
 
         return self;
@@ -220,13 +223,25 @@
          *
          */
         self = hunk('conf', function(/* key, value */) {
-            var args = Array.prototype.slice.call(arguments) || [];
+            var args = Array.prototype.slice.call(arguments) || [],
+                k;
+
             if (args.length === 0) {
                 return conf;
             }
 
             if (args.length === 2) {
                 conf[args[0]] = args[1];
+            } else if (args.length === 1 && typeof args[0] === 'object') {
+                for (k in args[0]) {
+                    if (args[0].hasOwnProperty(k)) {
+                        conf[k] = args[0][k];
+                    }
+                }
+
+                if (!!k) {
+                    return conf[k];
+                }
             }
 
             return conf[args[0]];
