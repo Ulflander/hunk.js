@@ -18,7 +18,7 @@
             .pipe(jshint())
             .pipe(jshint.reporter('default'))
             .pipe(gccompiler({
-              compilerPath: '../lib/gclosure-compiler.jar',
+              compilerPath: 'lib/gclosure-compiler.jar',
               fileName: 'temp.js'
             }))
     });

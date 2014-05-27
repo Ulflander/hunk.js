@@ -24,7 +24,11 @@ applications.
 
 # Install
 
-Soon available on npm and bower.
+```sh
+npm install --save hunk
+```
+
+Soon available on bower.
 
 # Basics
 
@@ -63,7 +67,7 @@ hello.speak();
 Perfect! You did it!
 
 For your information, the module you just created was a _static_ module - one
-that can't be instanciated
+that can't be instanciated.
 
 ## Start and stop Hunk
 
@@ -185,4 +189,17 @@ hunk(function() {
 hunk();
 // -> "App just started!"
 
+```
+
+
+# Work on the project
+
+### Build hunk for the browser
+
+For Node.js it is unnecessary to build hunk. However, you may want to lint it, check it with Google Closure Compiler, or for the browser you may want a minified version of hunk (the one in `dist/` folder).
+
+Be happy, the default gulp task will cover everything:
+
+```js
+gulp
 ```
