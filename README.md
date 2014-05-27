@@ -190,6 +190,17 @@ hunk();
 ```
 
 
+# Changelog
+
+### 1.0.1
+
+- Fix for Node.js
+
+### 1.0.0
+
+- Initial version, with core conf module and working triggers.
+
+
 # Work on the project
 
 ### Build hunk for the browser
