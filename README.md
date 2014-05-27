@@ -1,8 +1,6 @@
 Hunk.js
 =======
 
-_Please note that this project is still a work in progress._
-
 Micro-framework for JavaScript applications modularization, for Node.js and the browser.
 
 Hunk _is not_ a package manager. Hunk has been created to promote better JS
