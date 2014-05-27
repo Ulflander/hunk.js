@@ -5,7 +5,7 @@ _Please note that this project is still a work in progress._
 
 Micro-framework for JavaScript applications modularization, for Node.js and the browser.
 
-Hunk _is_not_ a package manager. Hunk has been created to promote better JS
+Hunk _is not_ a package manager. Hunk has been created to promote better JS
 factorisation, and to help modularize little — and eventually big — web 
 applications.
 
@@ -61,6 +61,9 @@ hello.speak();
 ```
 
 Perfect! You did it!
+
+For your information, the module you just created was a _static_ module - one
+that can't be instanciated
 
 ## Start and stop Hunk
 
