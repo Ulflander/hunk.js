@@ -1,10 +1,16 @@
 {
   "name": "hunk.js",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Micro-framework for JavaScript applications modularization, for Node.js and the browser.",
+  "keywords": ["micro-framework"],
+  "homepage": "https://github.com/Ulflander/hunk.js",
   "main": "hunk.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/Ulflander/hunk.js/issues",
+    "email": "xav+hunk+issues@laumonier.co"
   },
   "author": "Ulflander <xav@laumonier.co> (http://laumonier.co/)",
   "license": "MIT",
