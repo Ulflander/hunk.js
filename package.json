@@ -1,5 +1,5 @@
 {
-  "name": "hunk.js",
+  "name": "hunk",
   "version": "1.0.0",
   "description": "Micro-framework for JavaScript applications modularization, for Node.js and the browser.",
   "keywords": ["micro-framework"],
