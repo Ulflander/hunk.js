@@ -23,7 +23,7 @@ applications.
 # Install
 
 ```sh
-npm install --save hunk.js
+npm install --save hunk
 ```
 
 Soon available on bower.

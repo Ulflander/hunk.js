@@ -1,20 +1,21 @@
 
+
+var ctx = (function() {
+    'use strict';
+    // Under node, context is exports
+    if (typeof module !== 'undefined' &&
+        typeof module.exports !== 'undefined') {
+        return module.exports;
+    } else {
+        return window;
+    }
+}());
+
 (function() {
     'use strict';
 
-    // Hunk context
-    var ctx = (function() {
-            // Under node, context is exports
-            if (typeof module !== 'undefined' &&
-                typeof module.exports !== 'undefined') {
-                return module.exports;
-            } else {
-                return window;
-            }
-        }()),
-
         // Hunk reference
-        hunk;
+    var hunk;
 
     // Don't redeclare hunk
     if (typeof ctx.hunk === 'function') {
@@ -214,6 +215,8 @@
  * Configuration core module.
  */
 (function() {
+    'use strict';
+
 
     // Conf store
     var conf = {},
@@ -222,7 +225,7 @@
          * Set or get a configuration value.
          *
          */
-        self = hunk('conf', function(/* key, value */) {
+        self = ctx.hunk('conf', function(/* key, value */) {
             var args = Array.prototype.slice.call(arguments) || [],
                 k;
 
