@@ -114,7 +114,8 @@ var ctx = (function() {
                 arg = args.shift();
 
                 if (typeof arg === 'string' && arg !== 'hunk' &&
-                    typeof args[0] === 'function') {
+                        (typeof args[0] === 'function' || 
+                        typeof args[0] === 'object')) {
 
                     // If module already exists, rebind all declared members
                     // to the new holder

@@ -1,6 +1,6 @@
 {
   "name": "hunky",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Micro-framework for JavaScript applications modularization, for Node.js and the browser.",
   "keywords": ["micro-framework"],
   "homepage": "https://github.com/Ulflander/hunk.js",
