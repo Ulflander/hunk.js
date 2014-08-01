@@ -60,6 +60,7 @@ var ctx = (function() {
          */
         self.main = function() {
             var args = Array.prototype.slice.call(arguments) || [],
+                k,
                 m,
                 arg;
 
@@ -119,7 +120,7 @@ var ctx = (function() {
                     // If module already exists, rebind all declared members
                     // to the new holder
                     if (!!modules[arg]) {
-                        for (m in modules[arg]) {
+                        for (k in modules[arg]) {
                             if (modules[arg].hasOwnProperty(k)) {
                                 args[0][k] = modules[arg][k];
                             }
